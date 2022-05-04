@@ -5,8 +5,8 @@ Data Uploader for
 </h1>
 
 <p align="center">
-    <img src="images/header.png" width="310" height="310">
-    <img src="images/header2.png" width="310" height="310">
+    <img src="images/header.png" width="290" height="310">
+    <img src="images/header2.png" width="290" height="310">
 </p>
 
 <h5 align="center">
@@ -20,7 +20,7 @@ Data Uploader for
 
 __Purpose:__
 
-The purpose of this program is to transfer the input and baseline datasets residing within the RDHPCS to cloud data storage via chaining API calls to communicate with cloud data storage buckets. The program will support the data required for the current UFS-WM deployed within the CSPs as well as support the NOAA development team's data management in maintaining only the datasets committed within the latest N months of their UFS development code (once the program is integrated into Jenkins).
+The purpose of this program is to transfer the Unified Forecast Sytstem Short-Range Weather Application (UFS SRW Application) fixed and input model datasets residing within the RDHPCS to cloud data storage via chaining API calls to communicate with its cloud data storage bucket. The program will support the data required for the current UFS SRW Application.
 
 According to Amazon AWS, the following conditions need to be considered when transferring data to cloud data storage:
 
@@ -35,25 +35,23 @@ Tools which could be be utilized to perform data transferring & partitioning (Mu
 * AWS CLI
 * AWS S3 REST API
 
-All of the AWS provided tools are built on Boto3.
-
-In this demontration, the framework will implement Python AWS SDK for transferring the UFS datasets from the RDHPCS, Orion, to the cloud data storage with low latency.
+In this demontration, the framework will implement Python AWS SDK for transferring the UFS SRW application fixed and input model datasets from the RDHPCS, Orion, to the cloud data storage with low latency. 
 
 The AWS SDK will be implemented for the following reasons:
-
 To integrate with other python scripts.
 AWS SDK carries addition capabilities/features for data manipulation & transferring compare to the aforementioned alternate tools.
 
+
 __Capabilities:__
 
-This script will be able to perform the following actions:
+The framework will be able to perform the following actions:
 
-Apply multi-threading & partitioning to the datasets to assist in the optimization in uploading performance of the datasets from on-prem to cloud.
+Multi-threading & partitioning to the datasets to assist in the optimization in uploading performance of the datasets from on-prem to cloud. 
 
 
 __Future Capabilities:__
 
-The program can be used as a skeletal framework for transferring future datasets of interest (e.g. SRW data, MRW data, etc). In addition, it can be integrated with the UFS data tracker bot (https://github.com/NOAA-EPIC/ufs-dev_data_timestamps) & Jenkins to automate the data transferring process as new datasets are being committed & pushed to the UFS-WM repository develop branch.
+User can request the SRW datasets that is applicable to their SRW release version needs -- rather than the full datasets within the SRW tar folders as SRW development continues within this project program in the future.
 
 # Table of Contents
 * [Prerequisites](#Prerequisites)
@@ -155,22 +153,22 @@ Within the download, you will find the following directories and files:
 * Demo:
     * data_xfer2cloud_scripts_demo.ipynb
 * Scripts:
-    * upload_data.py
-        * Uploader via AWS SDK
-    * transfer_specific_data.py 
-        * Executable script for specific dataset to transfer to cloud
-    * transfer_bot_data.py  
-        * Executable script for datasets recorded by UFS data tracker bot to transfer to cloud
-    * get_timestamp_data.py
-        * Dataset reader from UFS data's source.   
+    * transfer_srw_data.py 
+        * Main executable script for uploading the full SRW datasets residing on-prem to cloud
+     * upload_data.py
+        * Uploader for the UFS SRW Application via AWS SDK
     * progress_bar.py
         * Monitors uploading progress of datasets to cloud  
+    * read_srw_we2e_cases.py
+        * Reads the SRW cases specified in  WE2E Cases and Locations.xlsx
+    * WE2E Cases and Locations.xlsx
+        * Excel file comprised of the list of cases requested by a given SRW user   
 
 * List of Dependencies: 
     * cloud_xfer_env.yml
 
 # Documentation
-* Refer to data_xfer2cloud_scripts_demo.ipynb
+* Refer to srw_data_xfer2cloud_scripts_demo.ipynb
 
 # Version:
-* Draft as of 03/30/22
+* Draft as of 05/04/22
