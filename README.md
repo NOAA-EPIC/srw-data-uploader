@@ -151,7 +151,7 @@ conda env export > [ENVIRONMENT FILENAME].yml
 # What's Included
 Within the download, you will find the following directories and files:
 * Demo:
-    * data_xfer2cloud_scripts_demo.ipynb
+    * srw_data_xfer2cloud_scripts_demo.ipynb
 * Scripts:
     * transfer_srw_data.py 
         * Main executable script for uploading the full SRW datasets residing on-prem to cloud
