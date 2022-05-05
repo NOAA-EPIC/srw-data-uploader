@@ -70,7 +70,7 @@ User can request the SRW datasets that is applicable to their SRW release versio
     * Refer to [Environment Setup](#Environment-Setup)
 
 # Dataset
-* N/A
+* On-Prem Orion
 
 # Quick Start
 * For demonstration purposes, refer to '.ipynb'
