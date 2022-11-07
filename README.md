@@ -144,11 +144,11 @@ conda activate [Name of your conda environment you wish to activate]
 
 *Note: On Orion, user must sym link from their home directory to the main directory containing the datasets of interest.
 
-### Open & Run Data Analytics Tool on Jupyter Notebook
+## Open & Run Application on Jupyter Notebook
 
-* Open OnDemand has a built-in file explorer and file transfer application available directly from its dashboard via ...
+* Open OnDemand has a built-in file explorer and file transfer application available directly from its dashboard via:
 
-Login to https://orion-ood.hpc.msstate.edu/
+    * Login to https://orion-ood.hpc.msstate.edu/
 
 * In the Open OnDemand Interface, select Interactive Apps > Jupyter Notbook
 
