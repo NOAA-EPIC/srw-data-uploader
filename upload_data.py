@@ -8,8 +8,6 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import time
 from progress_bar import ProgressPercentage
-session = boto3.Session(profile_name='srw-app')
-s3 = session.resource('s3')
 
 
 class UploadData():
@@ -23,9 +21,11 @@ class UploadData():
             file_relative_dirs (list): List of relative directory paths on-prem to obtain 
                                        the dataset files.
             use_bucket (str): If set to 'rt', datasets will be uploaded to the cloud data
-                              storage bucket designated for the UFS RT datasets. Set to 'srw'
-                              if datasets will be uploaded to the cloud data
-                              storage bucket designated for the UFS SRW datasets.
+                              storage bucket designated for the UFS RT datasets. If set to 
+                              'srw' datasets will be uploaded to the cloud data
+                              storage bucket designated for the UFS SRW datasets.If set to 
+                              'mrw' datasets will be uploaded to the cloud data
+                              storage bucket designated for the UFS MRW datasets.
                               
         """
         
@@ -35,20 +35,33 @@ class UploadData():
         # List of data files' relative directory paths on-prem. 
         self.file_relative_dirs = file_relative_dirs
         
+        # TODO: Setup of UFS RT datasets deviates from the way the SRW and MRW are currently 
+        # handled and structured by NOAA. May remove the 'use_bucket' argument of 'rt' & keep 
+        # script made specially for the UFS-WM RT dataset uploadinh. TBD.
         if use_bucket == 'rt':
             self.bucket_name = 'noaa-ufs-regtests-pds'
+            self.profile_name = 'default'
         elif use_bucket == 'srw':
             self.bucket_name = 'noaa-ufs-srw-pds'
+            self.profile_name = 'srw-app'
+        elif use_bucket == 'mrw':
+            self.bucket_name = 'noaa-ufs-mrw-pds'
+            self.profile_name = 'mrw-app'
         else:
             print(f"{use_bucket} Bucket Does Not Exist.")
+            
+        self.s3 = boto3.Session(profile_name=self.profile_name).resource('s3')
 
-    def upload_single_file(self, file_dir):
+    def upload_single_file(self, file_dir, key_path = None):
         """
         Upload a single data file to cloud w/ an established API configuraton.
 
         Args:
             file_dir (str): Relative directory path of the data file to transfer to 
                             cloud data storage.
+            key_path (str): Key of the object to upload. If None, the key path 
+                            of the object will be set to the object's local file 
+                            directory location by default.
             
         Return: None
         
@@ -79,23 +92,91 @@ class UploadData():
                                 multipart_chunksize=50000*KB,
                                 num_download_attempts=2,
                                 use_threads=True)
-
+        
         # Upload file w/out extra arguments.
         # Track multi-part upload progress current percentage, total, remaining size, etc
-        key_path = file_dir
-        s3.meta.client.upload_file(self.work_dir + file_dir,
+        if key_path == None:
+            key_path = file_dir
+        self.s3.meta.client.upload_file(self.work_dir + file_dir,
                                    self.bucket_name,
                                    key_path,
                                    Config=config,
                                    Callback=ProgressPercentage(self.work_dir + file_dir))
         
         # Upload file w/ extra arguments.
-        #s3.meta.client.upload_file(self.work_dir + file_dir,
+        #self.s3.meta.client.upload_file(self.work_dir + file_dir,
         #                           self.bucket_name,
         #                           key_path, 
         #                           ExtraArgs={'ACL': 'public-read', 'ContentType': 'text/nc'},
         #                           Config=config,
         #                           Callback=ProgressPercentage(self.work_dir + file_dir))
+        
+        end_time = time.time()
+        
+        # Processing time to upload file.
+        delta = (end_time-start_time)/60
+        print(f'Processing Time (min): {delta}\n')
+
+        return 
+
+    def upload_single_srw_folder(self, file_dir, key_path = None):
+        """
+        Upload a single data file to cloud w/ an established API configuraton.
+
+        Args:
+            file_dir (str): Relative directory path of the data folder to transfer to 
+                            cloud data storage.
+            key_path (str): Key of the object to upload. If None, the key path 
+                            of the object will be set to the object's local folder 
+                            directory location by default.
+            
+        Return: None
+        
+        The AWS SDK uploader will manage data file retries and handle multipart as well as 
+        non-multipart data transfers. To retain the current dataset
+        directory paths established on the RDPHPCS, Orion, each key of a data 
+        file object will be set to their source directory path as designated on Orion. 
+        Reason: Configured as sch to avoid altering too many variables within the 
+        UFS-WM Regression Test scripts for when the UFS-WM Regression Test framework 
+        begins to establish an experimental directory for the transferring of UFS data
+        files from and to the RDHPCS on-prem disk and user's experimental directory, respectively.
+        
+        Note: The callback script, ProgressPercentage, will calculate each file size in powers
+        of 1000 rather than 1024. The file size displayed from S3 cloud storage bucket will 
+        calculate each file size in powers of 1024.
+        
+        **TODO** If utilizing Jupyter Notebook, set NotebookApp.iopub_data_rate_limit=1.0e10 w/in 
+        the configuration file: "/.jupyter/jupyter_notebook_config.py"
+
+        """
+
+        # Configuration for multipart upload.
+        KB, MB, GB = 1024, 1024**2, 1024**3
+
+        start_time = time.time()
+        config = TransferConfig(multipart_threshold=100*MB,
+                                max_concurrency=10,
+                                multipart_chunksize=50000*KB,
+                                num_download_attempts=2,
+                                use_threads=True)
+        
+        # Upload file w/out extra arguments.
+        # Track multi-part upload progress current percentage, total, remaining size, etc
+        if key_path == None:
+            key_path = file_dir
+        self.s3.meta.client.upload_file(file_dir,
+                                   self.bucket_name,
+                                   key_path,
+                                   Config=config,
+                                   Callback=ProgressPercentage(file_dir))
+        
+        # Upload file w/ extra arguments.
+        #self.s3.meta.client.upload_file(file_dir,
+        #                           self.bucket_name,
+        #                           key_path, 
+        #                           ExtraArgs={'ACL': 'public-read', 'ContentType': 'text/nc'},
+        #                           Config=config,
+        #                           Callback=ProgressPercentage(file_dir))
         
         end_time = time.time()
         
@@ -123,7 +204,7 @@ class UploadData():
         """
         for dataset_type, ts_files in self.file_relative_dirs.items():
             for file_dir in ts_files:
-                self.upload_single_file(file_dir)
+                self.upload_single_file(file_dir, None)
                 
         return 
     
@@ -196,8 +277,8 @@ class UploadData():
 
             # Upload a file w/out extra arguments
             # Track multi-part upload progress current percentage, total, remaining size, etc
-            key_path=file_dir
-            s3.meta.client.upload_file(self.work_dir + file_dir,
+            key_path = file_dir
+            self.s3.meta.client.upload_file(self.work_dir + file_dir,
                                        self.bucket_name,
                                        key_path,
                                        Config=config,
@@ -224,7 +305,7 @@ class UploadData():
         Return: None
 
         """
-        s3.Object(self.bucket_name, key_path).delete()
+        self.s3.Object(self.bucket_name, key_path).delete()
 
         return
 
@@ -240,7 +321,7 @@ class UploadData():
 
         """
         
-        objects = s3.Bucket(self.bucket_name).objects.filter(Prefix=key_prefix)
+        objects = self.s3.Bucket(self.bucket_name).objects.filter(Prefix=key_prefix)
         for ob in objects:
             print(ob)
         objects.delete()
@@ -260,11 +341,12 @@ class UploadData():
         """
         
         # Instantiate bucket of interest.
-        bucket_ob = s3.Bucket(self.bucket_name)
+        bucket_ob = self.s3.Bucket(self.bucket_name)
         keys = []
         for obj in bucket_ob.objects.all():
             keys.append(obj.key)
-            
+        keys.sort()    
+        
         return keys
     
     def rename_s3_keys(self, source_key_path, new_key_path):
@@ -280,10 +362,10 @@ class UploadData():
         """
             
         # Set original object with new object key.
-        s3.Object(self.bucket_name, new_key_path).copy_from(CopySource=source_key_path)
+        self.s3.Object(self.bucket_name, new_key_path).copy_from(CopySource=source_key_path)
         
         # Delete the orginal object.
-        s3.Object(self.bucket_name, source_key_path).delete()
+        self.s3.Object(self.bucket_name, source_key_path).delete()
         print(f"The object's key, {source_key_path}, has been renamed to: {new_key_path}")
             
         return
