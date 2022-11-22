@@ -20,7 +20,7 @@ Data Uploader for
 
 __Purpose:__
 
-The purpose of this program is to transfer the Unified Forecast System Short-Range Weather Application (UFS SRW) initial conditions (ICs), lateral boundary conditions (LBCs), observation ICs, observation LBCs, & input model datasets residing within the RDHPCS to cloud data storage via chaining API calls to communicate with its cloud data storage bucket. The program will support the data required for the UFS SRW Application release versions.
+The purpose of this program is to transfer the Unified Forecast System Short-Range Weather Application (UFS SRW) initial conditions (ICs), lateral boundary conditions (LBCs), observation ICs, observation LBCs, natural earth, fixed, & model's input datasets residing within the RDHPCS to cloud data storage via chaining API calls to communicate with its cloud data storage bucket. The program will support the data required for the UFS SRW Application release versions.
 
 According to Amazon AWS, the following conditions need to be considered when transferring data to cloud data storage:
 
@@ -70,7 +70,8 @@ User can request the SRW datasets that is applicable to their SRW release versio
     * Refer to [Environment Setup](#Environment-Setup)
 
 # Dataset
-* On-Prem Orion
+* The ICs, LBCs, Natural Earth, & model's input datasets were derived from the RDHPCS, Orion.
+* The Indy Severe Weather case study datasets per SRW release version were derived from the RDHPCS, Hera.
 
 # Quick Start
 * For demonstration purposes, refer to '.ipynb'
