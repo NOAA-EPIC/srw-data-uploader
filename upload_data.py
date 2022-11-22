@@ -57,11 +57,11 @@ class UploadData():
         Upload a single data file to cloud w/ an established API configuraton.
 
         Args:
-            file_dir (str): Relative directory path of the data file to transfer to 
-                            cloud data storage.
-            key_path (str): Key of the object to upload. If None, the key path 
-                            of the object will be set to the object's local file 
-                            directory location by default.
+            file_dir (str): Relative directory path of the data file on RDHPCS to
+                            transfer to cloud data storage.
+            key_path (str): Establish key for object (e.g. individual data file) in 
+                            cloud. If None, the key of the object will be set to the
+                            object's local file directory location by default.
             
         Return: None
         
@@ -124,9 +124,9 @@ class UploadData():
         Upload a single data file to cloud w/ an established API configuraton.
 
         Args:
-            file_dir (str): Relative directory path of the data folder to transfer to 
-                            cloud data storage.
-            key_path (str): Key of the object to upload. If None, the key path 
+            file_dir (str): Relative directory path of the object (e.g. tar folder) on RDHPCS
+                            to transfer to cloud data storage.
+            key_path (str): Establish key for object in cloud. If None, the key
                             of the object will be set to the object's local folder 
                             directory location by default.
             
