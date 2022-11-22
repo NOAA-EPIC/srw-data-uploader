@@ -20,7 +20,7 @@ Data Uploader for
 
 __Purpose:__
 
-The purpose of this program is to transfer the Unified Forecast System Short-Range Weather Application (UFS SRW) fixed and input model datasets residing within the RDHPCS to cloud data storage via chaining API calls to communicate with its cloud data storage bucket. The program will support the data required for the current UFS SRW Application.
+The purpose of this program is to transfer the Unified Forecast System Short-Range Weather Application (UFS SRW) initial conditions (ICs), lateral boundary conditions (LBCs), observation ICs, observation LBCs, & input model datasets residing within the RDHPCS to cloud data storage via chaining API calls to communicate with its cloud data storage bucket. The program will support the data required for the UFS SRW Application release versions.
 
 According to Amazon AWS, the following conditions need to be considered when transferring data to cloud data storage:
 
