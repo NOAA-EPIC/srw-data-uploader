@@ -74,7 +74,7 @@ User can request the SRW datasets that is applicable to their SRW release versio
 * The Indy Severe Weather case study datasets per SRW release version were derived from the RDHPCS, Hera.
 
 # Quick Start
-* For demonstration purposes, refer to '.ipynb'
+* For demonstration purposes, refer to 'srw_data_xfer2cloud_scripts_demo.ipynb'
 
 # Environment Setup:
 
@@ -175,9 +175,11 @@ Within the download, you will find the following directories and files:
     * srw_data_xfer2cloud_scripts_demo.ipynb
 * Scripts:
     * transfer_srw_data.py 
-        * Main executable script for uploading the full SRW datasets residing on-prem to cloud
+        * Main executable script for extracting & uploading the full SRW datasets residing on-prem to cloud.
+    * get_srw_data.py
+        * Extracts the data directories of a tar & partitions data by external model used in the creation of model analysis files. 
      * upload_data.py
-        * Uploader for the UFS SRW Application via AWS SDK
+        * Uploads the UFS SRW Application via AWS SDK
     * progress_bar.py
         * Monitors uploading progress of datasets to cloud  
     * read_srw_we2e_cases.py
