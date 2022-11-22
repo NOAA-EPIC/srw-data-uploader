@@ -174,8 +174,11 @@ Within the download, you will find the following directories and files:
 * Demo:
     * srw_data_xfer2cloud_scripts_demo.ipynb
 * Scripts:
+    * transfer_srw_tar.py 
+        * Main executable script for extracting & uploading the tar formatted SRW datasets residing on-prem to cloud. Allows user to set a unique key for the tar object supporting the SRW.
     * transfer_srw_data.py 
-        * Main executable script for extracting & uploading the full SRW datasets residing on-prem to cloud.
+        * Main executable script for extracting & uploading the full SRW datasets residing on-prem to cloud. Sets
+        unique keys for the individual data files supporting the SRW.
     * get_srw_data.py
         * Extracts the data directories of a tar & partitions data by external model used in the creation of model analysis files. 
      * upload_data.py
