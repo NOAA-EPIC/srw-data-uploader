@@ -74,10 +74,10 @@ User can request the SRW datasets that is applicable to their SRW release versio
 * The Indy Severe Weather case study datasets per SRW release version were derived from the RDHPCS, Hera.
 
 # Quick Start
-* For demonstration purposes, refer to 'srw_data_xfer2cloud_scripts_demo.ipynb'
 1) Install miniconda per "Environment Setup" section.
 2) Establish AWS credentials configuration file via the "AWS Command Line Interface (AWS CLI) Credentials Setup" page in Confluence.
-3) Save data of interest to migrate to cloud within the repository's "main" folder & structure the data on-premise as you would like it structured in cloud. For example, the relative directory of "landda-data-2016.tar.gz" should be saved as "current_land_da_release_data/landda-data-2016.tar.gz" within the "main" folder on-premise for its object's key to be set as "current_land_da_release_data/landda-data-2016.tar.gz" in cloud.
+3) For demonstration purposes, refer to the drafted demo: 'srw_data_xfer2cloud_scripts_demo.ipynb'
+
 
 # Environment Setup:
 
